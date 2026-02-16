@@ -1,44 +1,27 @@
+import Counter from "./components/Counter"
+import Profile from "./components/Profile"
+import InputExample from "./components/InputExample"
 import User from "./components/User"
-import Button from "./components/Button"
-import Product from "./components/Product"
-import Student from "./components/Student"
+import Todo from "./components/Todo"
 
 function App() {
-  function handleClick() {
-    alert("Button clicked from Child!");
-  }
+  return (<>
+  <Counter/>
+  <Profile/> {/* Multiple State Example */}
+  <InputExample/> {/* State with Input (Controlled Component 🔥) */}
+  
+  {/* State with Object */}
+  <User/>
 
-  function Card({ children }) {
-    return <div className="card">{children}</div>;
-  }
-
-  return (
-    <div>
-    <User name="Sandeep" age={24} />
-
-    {/* Props ke Types (kya-kya bhej sakte ho) */}
-    {/* <User
-    name="Rahul"          // string
-    age={22}              // number
-    isStudent={true}      // boolean
-    skills={["JS", "React"]} // array
-    /> */}
-
-    <Button onClick={handleClick} />
-
-    <Card>
-      <h2>Hello</h2>
-      <p>This is inside card</p>
-    </Card>
-
-    <Product title="Laptop" price={55000} />
-    <Product title="Mobile" price={20000} />
-    {/* 👉 Ek component, multiple products 💥 */}
-    <Student name='Sandeep' course='BCA'/>
-    <Button onClick={handleClick} />
-
-    </div>
-  );
+  {/* State with Array */}
+  <Todo/>
+  </>)
 }
 
 export default App;
+
+// state → current value
+// setState → value update karne ka function
+
+// setCount(prev => prev + 1);
+// 👉 Jab previous value pe depend ho — yeh best practice hai.
