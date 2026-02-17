@@ -1,3 +1,4 @@
+// Performance & DOM Control (React 19)
 // 📅 DAY 5 – useRef, useMemo, useCallback
 
 // 👉 useRef
