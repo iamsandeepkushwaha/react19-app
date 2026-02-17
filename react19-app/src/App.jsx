@@ -1,67 +1,48 @@
-import { useState, useEffect } from "react";
-import TitleChange from './components/TitleChange'
-import User from './components/Users'
-import Todo from './components/Todo'
+// 📅 DAY 5 – useRef, useMemo, useCallback
+
+// 👉 useRef
+// DOM elements ko direct access karta hai
+// Value store karta hai bina component ko re-render kiye
+// Previous value ya mutable data rakhne ke kaam aata hai
+
+import FocusInput from "./components/FocusInput";
+import Counter from "./components/Counter";
+
+// 👉 useMemo
+// Heavy calculation ko memoize karta hai
+// Jab dependency change hoti hai tabhi calculation dobara hoti hai
+import Expensive from "./components/Expensive";
+
+// 👉 useCallback + React.memo
+// Function reference ko memoize karta hai
+// Child component ke unnecessary re-render ko prevent karta hai
+import Parent from "./components/Parent";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  // Case 1: useEffect WITHOUT dependency array
-  useEffect(() => {
-    console.log("Render hua");
-    console.log("Welcome React 19");
-  });
-  // 👉 Har render pe chalega
-  // ⚠️ Rarely use
-
-  // Case 2: Empty dependency array [] ✅ (MOST COMMON)
-  useEffect(() => {
-    console.log("Component mounted");
-    console.log("👉 Sirf 1 baar (page load jaisa)");
-  }, []);
-  // 👉 Sirf 1 baar (page load jaisa)
-  // 📌 API calls yahin likhte hain
-
-  // Case 3: Dependency ke saath
-  useEffect(() => {
-    console.log("Count change hua");
-  }, [count]);
-  // 👉 Jab count change hoga tab effect chalega
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      console.log("Running...");
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  // 👉 Component unmount hone pe cleanup
-
   return (
     <>
-      <h3>{count}</h3>
-      <button onClick={()=>  setCount( count + 1 )}>+</button>
-      
-      {/* Real Example – Document Title Change */}
-      <TitleChange/>
+      {/* useRef example */}
+      <FocusInput />
+      <Counter />
 
-      {/* API Call Example  */}
-      <User/>
+      {/* useMemo – value memoization */}
+      {/* Jab count change hoga tabhi expensive calculation chalega */}
+      <Expensive />
 
-      <Todo/>
+      {/* useCallback + React.memo */}
+      {/* Same function reference pass hota hai to Child re-render nahi hota */}
+      <Parent />
     </>
   );
 }
 
 export default App;
 
-// useEffect ka basic syntax
-// useEffect(() => {
-//   // side effect code
+/*
+🧠 Summary (ratne wali lines):
 
-//   return () => {
-//     // cleanup code (optional)
-//   };
-// }, [dependencies]);
+- useRef → value store karta hai bina re-render
+- useMemo → heavy calculation ko cache karta hai
+- useCallback → function reference ko stable rakhta hai
+- React.memo → props same ho to re-render rok deta hai
+*/
