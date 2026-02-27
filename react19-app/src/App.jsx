@@ -1,76 +1,60 @@
-// 🧩 PHASE 2: Hooks Deep Dive (Day 4–7)
-// Phase Name: Reusability & Clean Architecture (React 19)
-// 📅 DAY 6 – Custom Hooks (Deep & Practical)
-// 👉 Custom Hooks = clean code + reusable logic + interview GOLD 🥇
+// 🧩 PHASE 3: Global State Management (React 19)
+// Phase Name: Global State Management
+// 👉 Context API = global data without headache 😎
 
-import useCounter from "./hooks/useCounter";
-import useFetch from "./hooks/useFetch";
-import usePrevious from "./hooks/usePrevious";
-import useToggle from "./hooks/useToggle";
-import useLocalStorage from "./hooks/useLocalStorage";
+import Navbar from "./components/Navbar";
+import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
-  // ✅ Hooks MUST be top-level
-  const { count, increment, decrement } = useCounter(5);
-  const prevCount = usePrevious(count);
-
-  const { data, loading, error } = useFetch(
-    "https://jsonplaceholder.typicode.com/posts"
-  );
-
-  const [isOpen, toggle] = useToggle(false);
-  const [name, setName] = useLocalStorage("username", "");
-
-  // ✅ Early return pattern (BEST PRACTICE)
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <>
-      <h2>Count: {count}</h2>
-      <h3>Previous Count: {prevCount}</h3>
-
-      <button onClick={increment}>+</button>
-      <button onClick={decrement}>-</button>
-
-      <hr />
-
-      {/* API DATA */}
-      <ul>
-        {data.slice(0, 5).map(post => (
-          <li key={post.id}>{post.title}</li>
-        ))}
-      </ul>
-
-      <hr />
-
-      {/* TOGGLE */}
-      <button onClick={toggle}>
-        {isOpen ? "ON" : "OFF"}
-      </button>
-
-      <hr />
-
-      {/* LOCAL STORAGE */}
-      <input
-        placeholder="Enter name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-      />
-    </>
+    <AuthProvider>
+      <ThemeProvider>
+        <Navbar />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
 export default App;
 
-// ❌ Problem
-// Same logic multiple components me copy-paste
+// ===================================================
+// 1️⃣ PROP DRILLING kya hota hai? 🤔
+// ===================================================
 
-// ✅ Solution
-// Logic ko custom hook bana do
+// Jab data flow hota hai:
+// App → A → B → C
 
-// 🧠 Rules of Custom Hooks (Interview MUST)
-// 1️⃣ Name starts with "use"
-// 2️⃣ Hooks sirf top-level par
-// 3️⃣ Sirf component ya custom hook ke andar
-// 4️⃣ ❌ Conditions / loops / nested functions ke andar nahi
+// ❗ Problem:
+// 👉 Data sirf C component ko chahiye
+// 👉 Lekin A aur B ko bina kaam ke props pass karne padte hain 😵
+
+// 🔴 Example (Prop Drilling):
+// <A user={user}>
+//   <B user={user}>
+//     <C user={user} />
+//   </B>
+// </A>
+
+// 👉 Is problem ko bolte hain: PROP DRILLING ❌
+
+// ===================================================
+// 4️⃣ Context API ke 3 IMPORTANT PARTS 🔥
+// ===================================================
+
+// 1️⃣ createContext()
+// 👉 Context create karta hai (global data container)
+
+// 2️⃣ Provider
+// 👉 Data provide karta hai poori component tree ko
+
+// 3️⃣ useContext()
+// 👉 Kisi bhi component me data consume karne ke liye
+
+
+// ===================================================
+// 🧠 One-liner (Interview Ready)
+// ===================================================
+
+// "Context API helps avoid prop drilling by providing
+// global state accessible to any component directly."
