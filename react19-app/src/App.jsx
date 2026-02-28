@@ -1,60 +1,58 @@
-// 🧩 PHASE 3: Global State Management (React 19)
-// Phase Name: Global State Management
-// 👉 Context API = global data without headache 😎
+import { Suspense } from "react";
 
-import Navbar from "./components/Navbar";
-import { AuthProvider } from "./context/AuthContext";
-import { ThemeProvider } from "./context/ThemeContext";
+import Form from "./components/Form";
+import LikeButton from "./components/LikeButton";
+import ErrorBoundary from "./components/ErrorBoundary";
+import LoginForm from "./components/LoginForm";
+import UserProfile from "./components/UserProfile";
 
 function App() {
+
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <Navbar />
-      </ThemeProvider>
-    </AuthProvider>
+    <>
+      {/* Server / Action Form */}
+      <Form />
+
+      {/* Suspense handles loading */}
+      <Suspense fallback={<h2>Loading...</h2>}>
+        {/* ErrorBoundary handles crashes */}
+        <ErrorBoundary>
+          <LikeButton />
+        </ErrorBoundary>
+      </Suspense>
+
+      <LoginForm/>
+      <Suspense fallback={<h2>Loading user data...</h2>}>
+      <UserProfile/>
+      </Suspense>
+    </>
   );
 }
 
 export default App;
 
-// ===================================================
-// 1️⃣ PROP DRILLING kya hota hai? 🤔
-// ===================================================
 
-// Jab data flow hota hai:
-// App → A → B → C
-
-// ❗ Problem:
-// 👉 Data sirf C component ko chahiye
-// 👉 Lekin A aur B ko bina kaam ke props pass karne padte hain 😵
-
-// 🔴 Example (Prop Drilling):
-// <A user={user}>
-//   <B user={user}>
-//     <C user={user} />
-//   </B>
-// </A>
-
-// 👉 Is problem ko bolte hain: PROP DRILLING ❌
-
-// ===================================================
-// 4️⃣ Context API ke 3 IMPORTANT PARTS 🔥
-// ===================================================
-
-// 1️⃣ createContext()
-// 👉 Context create karta hai (global data container)
-
-// 2️⃣ Provider
-// 👉 Data provide karta hai poori component tree ko
-
-// 3️⃣ useContext()
-// 👉 Kisi bhi component me data consume karne ke liye
+// 🔑 Samjho
+// Suspense = waiting room 🛋️
+// fallback = loader UI
+// API load hone ke baad real component render
 
 
-// ===================================================
-// 🧠 One-liner (Interview Ready)
-// ===================================================
+// import { useActionState } from "react";
 
-// "Context API helps avoid prop drilling by providing
-// global state accessible to any component directly."
+// function App() {
+//   async function saveData(formData) {
+//     "use server";
+
+//     const name = formData.get("name");
+//     console.log(name);
+//   }
+//   return (
+//     <form action={saveData}>
+//       <input name="name" />
+//       <button>Save</button>
+//     </form>
+//   );
+// }
+
+// export default App;
